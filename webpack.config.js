@@ -14,8 +14,7 @@ module.exports = {
     mode: 'development',
     plugins: [
         new MiniCssExtractPlugin({
-            filename: '[name].[id].css',
-            chunkFilename: "[id].css"
+            filename: '[name].css',
         }),
         new webpack.LoaderOptionsPlugin({
             minimize: true
@@ -28,7 +27,15 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                // use: ['style-loader', 'css-loader']
+                use: [{
+                        loader: 'css-loader',
+                        options: {
+                            url: false
+                        }
+                    },
+                    'sass-loader'
+                ]
             },
             {
                 test: /\.js$/,
