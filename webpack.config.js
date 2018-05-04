@@ -9,10 +9,13 @@ module.exports = {
     },
     mode: 'development',
     module: {
-        rules: [
+        rules: [{
+                test: /\.s[ac]ss$/,
+                use: ['style-loader', 'css-loader', 'sass-loader']
+            },
             {
                 test: /\.css$/,
-                use: ['style-loader' ,'css-loader']
+                use: ['style-loader', 'css-loader']
             },
             {
                 test: /\.js$/,
