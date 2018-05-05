@@ -1,7 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 
+const glob = require('glob');
+
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const PurifyCssPlugin = require('purifycss-webpack');
 
 module.exports = {
     entry: {
@@ -18,7 +21,15 @@ module.exports = {
         }),
         new webpack.LoaderOptionsPlugin({
             minimize: true
-        })
+        }),
+        new PurifyCssPlugin({
+            paths: glob.sync(path.join(__dirname, 'dist/index.html'))
+        }),
+        function () {
+            this.plugin('done', stats => {
+                console.log(stats);
+            });
+        }
     ],
     module: {
         rules: [{
@@ -41,6 +52,18 @@ module.exports = {
                 test: /\.js$/,
                 use: 'babel-loader',
                 exclude: /node_modules/
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/,
+                use: [
+                    'img-loader',
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[hash].[name].[ext]'
+                        }
+                    }
+                ]
             }
         ]
     },
